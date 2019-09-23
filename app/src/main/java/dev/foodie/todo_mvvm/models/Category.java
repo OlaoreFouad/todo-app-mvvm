@@ -1,9 +1,20 @@
 package dev.foodie.todo_mvvm.models;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "categories_table")
 public class Category {
 
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     private int imageName;
+
     private String title;
+
     private int tasks;
 
     public Category() {
@@ -13,6 +24,14 @@ public class Category {
         this.imageName = imageName;
         this.title = title;
         this.tasks = tasks;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getImageName() {

@@ -2,4 +2,5 @@
     <string name="app_name">todo-mvvm</string>
     <string name="splash_screen_image_alt">Splash Screen Image</string>
     <string name="lists">Lists</string>
+    <string name="no_todos_yet">No todos yet!.☹</string>
 </resources>
