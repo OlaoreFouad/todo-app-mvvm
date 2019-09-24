@@ -1,6 +1,7 @@
 package dev.foodie.todo_mvvm.models;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -17,6 +18,7 @@ public class Todo implements Serializable {
     private String description;
     private long createdAt;
     private String category;
+
     private int completed;
 
     public Todo() {}

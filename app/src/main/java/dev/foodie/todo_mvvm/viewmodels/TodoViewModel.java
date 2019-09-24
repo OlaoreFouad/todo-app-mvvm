@@ -35,7 +35,7 @@ public class TodoViewModel extends AndroidViewModel {
         this.todoRepository.deleteTodo(todo);
     }
 
-    public void deleteAllNotes() {
+    public void deleteAllTodos() {
         this.todoRepository.deleteAllTodos();
     }
 
@@ -51,7 +51,7 @@ public class TodoViewModel extends AndroidViewModel {
         this.todoRepository.setLate(id);
     }
 
-    public LiveData<List<Todo>> getTodosByCategory(String category) throws Exception {
+    public LiveData<List<Todo>> getTodosByCategory(String category) {
         Log.d("TODOS", "getTodosByCategory: " + category);
         return this.todoRepository.getTodosByCategory(category);
     }

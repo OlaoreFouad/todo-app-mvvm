@@ -6,11 +6,18 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements OnCategorySelecte
 
     private TodoViewModel todoViewModel;
     private ProgressDialog progressDialog;
+    private FloatingActionButton deleteTodosFab;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     int all = 0, work = 0, music = 0, travel = 0, study = 0, home = 0, games = 0, shopping = 0;
 
@@ -39,18 +49,66 @@ public class MainActivity extends AppCompatActivity implements OnCategorySelecte
         setContentView(R.layout.activity_main);
 
         todoViewModel = ViewModelProviders.of(this).get(TodoViewModel.class);
+        Log.d("TODOS", "onCreate: " + todoViewModel.hashCode());
+        initCategories();
+
+        mSwipeRefreshLayout = findViewById(R.id.swipeRefreshContainer);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                categoryAdapter.clearList();
+                initCategories();
+
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        deleteTodosFab = findViewById(R.id.deleteTodosFab);
+
+        deleteTodosFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Delete All Todos")
+                        .setMessage("Are you sure you don't have anything to do?")
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .setPositiveButton("I'm sure", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                todoViewModel.deleteAllTodos();
+                                categoryAdapter.clearList();
+                                initCategories();
+                            }
+                        }).create();
+
+                alertDialog.show();
+            }
+        });
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading");
         progressDialog.setMessage("Retrieving your tasks...");
         progressDialog.show();
 
-        initCategories();
+
         progressDialog.dismiss();
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
     private void initCategories() {
         categories = new ArrayList<>();
+        all = 0; work = 0; music = 0; travel = 0; study = 0; home = 0; games = 0; shopping = 0;
 
         todoViewModel.getTodos().observe(this, new Observer<List<Todo>>() {
             @Override

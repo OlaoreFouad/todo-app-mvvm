@@ -45,6 +45,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return this.categories.size();
     }
 
+    public void clearList() {
+        this.categories.clear();
+        notifyDataSetChanged();
+    }
+
     class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView image;
@@ -73,7 +78,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         void setData(Category cat) {
             this.image.setImageResource(cat.getImageName());
             this.title.setText(cat.getTitle());
-            this.tasks.setText(cat.getTasks() + " Tasks");
+            this.tasks.setText(cat.getTasks() + " Task" + (cat.getTasks() == 1 ? "" : "s"));
         }
 
     }

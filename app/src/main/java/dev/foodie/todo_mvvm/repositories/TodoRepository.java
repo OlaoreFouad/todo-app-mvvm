@@ -50,8 +50,19 @@ public class TodoRepository {
         new Tasks.SetTodoLate(dao).execute(id);
     }
 
-    public LiveData<List<Todo>> getTodosByCategory(String category) throws Exception {
-        return new Tasks.GetTodosByCategory(dao).execute(category).get();
+    public LiveData<List<Todo>> getTodosByCategory(String category) {
+
+        LiveData<List<Todo>> todos = null;
+
+        try {
+            Tasks.GetTodosByCategory getTodosByCategory = new Tasks.GetTodosByCategory(dao);
+            todos = getTodosByCategory.execute(category).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return todos;
+
     }
 
     public LiveData<List<Todo>> getTodos() {

@@ -17,13 +17,16 @@ import java.util.Date;
 import java.util.List;
 
 import dev.foodie.todo_mvvm.R;
+import dev.foodie.todo_mvvm.listeners.OnTodoCompletedListener;
 import dev.foodie.todo_mvvm.models.Todo;
 
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder> {
 
     private List<Todo> todos;
+    private OnTodoCompletedListener mOnTodoCompletedListener;
 
-    public TodoAdapter() {
+    public TodoAdapter(OnTodoCompletedListener mOnTodoCompletedListener) {
+        this.mOnTodoCompletedListener = mOnTodoCompletedListener;
     }
 
     @NonNull
@@ -72,7 +75,10 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
             completed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    Log.d("TODOS", "onCheckedChanged: " + b);
+                    if (b) {
+                        Todo completedTodo = todos.get(getAdapterPosition());
+                        mOnTodoCompletedListener.todoCompleted(completedTodo);
+                    }
                 }
             });
         }
