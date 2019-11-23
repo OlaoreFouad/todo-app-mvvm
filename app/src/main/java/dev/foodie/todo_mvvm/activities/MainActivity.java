@@ -115,8 +115,8 @@ public class MainActivity extends AppCompatActivity implements OnCategorySelecte
             public void onChanged(List<Todo> todos) {
                 Log.d("TODOS", "onChanged: hey!" + todos.size());
                 for (Todo todo: todos) {
+                    ++all;
                     switch (todo.getCategory().toLowerCase()) {
-                        case "all": ++all; break;
                         case "work": ++work; break;
                         case "music": ++music; break;
                         case "travel": ++travel; break;

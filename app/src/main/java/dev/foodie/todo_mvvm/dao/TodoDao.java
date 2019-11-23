@@ -27,10 +27,10 @@ public interface TodoDao {
     @Query("DELETE FROM todos_table")
     void deleteAllTodos();
 
-    @Query("SELECT * FROM todos_table WHERE category = :category")
+    @Query("SELECT * FROM todos_table WHERE category = :category ORDER BY createdAt")
     LiveData<List<Todo>> getTodosByCategory(String category);
 
-    @Query("SELECT * FROM todos_table")
+    @Query("SELECT * FROM todos_table ORDER BY createdAt")
     LiveData<List<Todo>> getTodos();
 
     @Query("UPDATE todos_table SET completed = 1 WHERE id = :id")

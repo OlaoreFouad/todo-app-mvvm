@@ -97,7 +97,32 @@ public class ViewTodosActivity extends AppCompatActivity {
         String title = extras.getString("title");
         int image = extras.getInt("image");
 
-        //try {
+        if (title.toLowerCase().equals("all")) {
+            todoViewModel.getTodos().observe(this, new Observer<List<Todo>>() {
+                @Override
+                public void onChanged(List<Todo> todos) {
+                    if (todos.isEmpty()) {
+                        noTodosTitle.setVisibility(View.VISIBLE);
+                        noTodosContent.setVisibility(View.VISIBLE);
+                        todosRecyclerView.setVisibility(View.INVISIBLE);
+
+                        viewCategoryTasks.setText("0 tasks");
+                    } else {
+                        noTodosTitle.setVisibility(View.INVISIBLE);
+                        noTodosContent.setVisibility(View.INVISIBLE);
+                        todosRecyclerView.setVisibility(View.VISIBLE);
+
+                        todoAdapter = new TodoAdapter(mOnTodoCompletedListener);
+                        todosRecyclerView.setHasFixedSize(true);
+                        todosRecyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+                        todosRecyclerView.setAdapter(todoAdapter);
+
+                        todoAdapter.setTodos(todos);
+                        viewCategoryTasks.setText(todos.size() + " Task" + (todos.size() == 1 ? "" : "s"));
+                    }
+                }
+            });
+        } else {
             todoViewModel.getTodosByCategory(title.toLowerCase()).observe(this, new Observer<List<Todo>>() {
                 @Override
                 public void onChanged(List<Todo> todos) {
@@ -122,9 +147,7 @@ public class ViewTodosActivity extends AppCompatActivity {
                     }
                 }
             });
-        //} catch (Exception e) {
-          //  e.printStackTrace();
-        //}
+        }
 
         viewCategoryTitle.setText(title);
         viewCategoryImage.setImageResource(image);
